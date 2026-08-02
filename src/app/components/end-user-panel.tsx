@@ -1096,22 +1096,9 @@ function NewConversationModal() {
   const { openChat, closeModal } = useApp();
   const [q, setQ] = useState('');
 
-  const APP_USERS = [
-    { id: 'au1', name: 'علی رضایی', init: 'ع', bg: 'bg-blue-600', handle: '@ali.rezaei', online: true },
-    { id: 'au2', name: 'مریم احمدی', init: 'م', bg: 'bg-pink-500', handle: '@maryam.ah', online: true },
-    { id: 'au3', name: 'حسین کریمی', init: 'ح', bg: 'bg-emerald-600', handle: '@h.karimi', online: false },
-    { id: 'au4', name: 'سارا محمدی', init: 'س', bg: 'bg-amber-600', handle: '@sara.m', online: false },
-    { id: 'au5', name: 'رضا نوری', init: 'ر', bg: 'bg-cyan-600', handle: '@reza.nouri', online: true },
-    { id: 'au6', name: 'نگار موسوی', init: 'ن', bg: 'bg-violet-600', handle: '@negar.mo', online: true },
-    { id: 'au7', name: 'امیر حسینی', init: 'ا', bg: 'bg-rose-600', handle: '@amir.h', online: false },
-    { id: 'au8', name: 'فاطمه نوری', init: 'ف', bg: 'bg-teal-600', handle: '@f.nouri', online: false },
-    { id: 'au9', name: 'محمد جعفری', init: 'م', bg: 'bg-indigo-600', handle: '@m.jafari', online: true },
-    { id: 'au10', name: 'زهرا اکبری', init: 'ز', bg: 'bg-fuchsia-600', handle: '@zahra.ak', online: false },
-    { id: 'au11', name: 'کیان رستمی', init: 'ک', bg: 'bg-sky-600', handle: '@kian.r', online: true },
-    { id: 'au12', name: 'لیلا صادقی', init: 'ل', bg: 'bg-lime-600', handle: '@leila.s', online: false },
-    { id: 'au13', name: 'بهرام قاسمی', init: 'ب', bg: 'bg-orange-600', handle: '@bahram.gh', online: false },
-    { id: 'au14', name: 'شیرین کمالی', init: 'ش', bg: 'bg-red-600', handle: '@shirin.k', online: true },
-  ];
+  // مخاطبینِ واقعیِ کاربر (از /ai/contacts) — نه فهرستِ کاربرانِ فیک.
+  const [APP_USERS, setPeople] = React.useState<any[]>([]);
+  React.useEffect(() => { (async () => { try { const r: any = await api.contacts(); const list = (r && r.contacts) || []; setPeople(list.map((c: any, i: number) => ({ id: 'c' + i, name: c.name || c.phone || 'مخاطب', init: String(c.name || c.phone || '?').charAt(0), bg: 'bg-[var(--aw-eu-primary,#7B62FC)]', handle: c.phone || '', online: false }))); } catch (_e) {} })(); }, []);
 
   const sq = q.trim().toLowerCase();
   const filtered = APP_USERS.filter(u => !sq || u.name.toLowerCase().includes(sq) || u.handle.toLowerCase().includes(sq));
