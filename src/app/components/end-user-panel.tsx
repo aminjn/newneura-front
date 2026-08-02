@@ -36,9 +36,9 @@ function EuHeader() {
   // Personal-assistant agents for the top name dropdown.
   const asstAgents = (agents || []).filter((a: any) => a.team === 'assistant' || a.id === 'assistant');
   const activeAsst = asstAgents.find((a: any) => a.id === assistantId) || asstAgents[0];
-  const asstDisplayName = (id: string) => id === 'assistant'
-    ? ((typeof localStorage !== 'undefined' && localStorage.getItem('aw-eu-assistant-name')) || 'دستیار شخصی')
-    : ((agents.find((a: any) => a.id === id)?.name) || 'دستیار');
+  // نامِ نمایشیِ دستیار = نامِ واقعیِ ایجنت از سرور (api.agents با overlayِ agent_prefs)، نه localStorageِ محلی.
+  // قبلاً برای 'assistant' از کلیدِ aw-eu-assistant-name خوانده می‌شد که هیچ‌وقت نوشته نمی‌شد → اسمِ ذخیره‌شده نمایش داده نمی‌شد.
+  const asstDisplayName = (id: string) => (agents.find((a: any) => a.id === id)?.name) || 'دستیار شخصی';
   const asstNameOptions = asstAgents.map((a: any) => ({ id: a.id, name: asstDisplayName(a.id) }));
   const addAssistant = () => {
     const id = 'asst_' + Date.now();

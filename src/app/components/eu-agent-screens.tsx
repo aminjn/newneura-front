@@ -1859,9 +1859,8 @@ export function EuAssistantScreen() {
   // Personal-assistant agents + the active one (drives header name/theme + welcome).
   const assistantAgents = agents.filter((a: any) => a.team === 'assistant' || a.id === 'assistant');
   const activeAsst = assistantAgents.find((a: any) => a.id === assistantId) || assistantAgents[0];
-  const activeAsstName = activeAsst?.id === 'assistant'
-    ? ((typeof localStorage !== 'undefined' && localStorage.getItem('aw-eu-assistant-name')) || 'دستیار شخصی')
-    : (activeAsst?.name || 'دستیار شخصی');
+  // نامِ واقعیِ ایجنت از سرور (agent_prefs overlay)، نه localStorageِ نانوشته.
+  const activeAsstName = activeAsst?.name || 'دستیار شخصی';
   const [asstOpen, setAsstOpen] = useState(false);
   const [tasks, setTasks] = useState(INITIAL_TASKS);
   const [events, setEvents] = useState(INITIAL_CAL_EVENTS);
@@ -2055,7 +2054,7 @@ export function EuAssistantScreen() {
                     style={{ background: 'color-mix(in srgb, var(--aw-eu-primary) 12%, var(--aw-bg-modal, rgba(240,238,250,0.9)))', backdropFilter: 'blur(22px) saturate(1.5)', WebkitBackdropFilter: 'blur(22px) saturate(1.5)', border: '1px solid color-mix(in srgb, var(--aw-eu-primary) 32%, transparent)', boxShadow: '0 16px 40px rgba(0,0,0,0.28), inset 0 1px 1px rgba(255,255,255,0.35)' }}>
                     {assistantAgents.map((a: any) => {
                       const isActive = a.id === (activeAsst?.id);
-                      const nm = a.id === 'assistant' ? ((typeof localStorage !== 'undefined' && localStorage.getItem('aw-eu-assistant-name')) || 'دستیار شخصی') : a.name;
+                      const nm = a.name || 'دستیار شخصی';
                       return (
                         <button key={a.id} onClick={() => { setAssistantId(a.id); setAsstOpen(false); }}
                           className="w-full flex items-center gap-2 px-2.5 py-2 rounded-xl cursor-pointer border-none text-right transition-colors"
